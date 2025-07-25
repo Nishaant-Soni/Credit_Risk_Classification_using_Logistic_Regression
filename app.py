@@ -19,8 +19,14 @@ def load_models():
         model_info = joblib.load('model_info.pkl')
     except FileNotFoundError:
         model_info = None
+        print("Warning: model_info.pkl not found. Some features may be limited.")
     
-    feature_names = joblib.load('feature_names.pkl')
+    try:
+        feature_names = joblib.load('feature_names.pkl')
+    except FileNotFoundError:
+        # Fallback to default feature names
+        feature_names = ['loan_size', 'interest_rate', 'borrower_income', 
+                        'debt_to_income', 'num_of_accounts', 'derogatory_marks', 'total_debt']
     
     return models, model_info, feature_names
 
