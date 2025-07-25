@@ -65,7 +65,6 @@ scikit-learn
 joblib
 numpy
 imbalanced-learn
-matplotlib
 ```
 
 ## Streamlit Web Application
