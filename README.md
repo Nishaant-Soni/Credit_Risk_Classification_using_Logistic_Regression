@@ -6,11 +6,11 @@ This project implements a credit risk assessment system using **Logistic Regress
 ## Key Features
 - **Logistic Regression Model**: Interpretable and reliable binary classification
 - **Advanced Data Handling**: RandomOverSampler to address severe class imbalance
-- **High Performance**: 99%+ accuracy with balanced precision and recall
+- **High Performance**: 99.42% accuracy and 0.9945 ROC-AUC with balanced precision and recall
 - **Interactive Web App**: Streamlit-based interface for real-time predictions
 - **Production Ready**: Complete model serialization and deployment architecture
 
-## Dataset
+## Original Dataset
 The analysis uses lending data with 77,536 loan records containing:
 - **Features**: 7 financial indicators (loan size, interest rate, borrower income, debt-to-income ratio, number of accounts, derogatory marks, total debt)
 - **Target**: Binary classification (0 = healthy loan, 1 = high-risk loan)
@@ -21,7 +21,7 @@ The analysis uses lending data with 77,536 loan records containing:
 ## Methodology
 
 ### 1. Data Preprocessing
-- **Class Imbalance Handling**: Applied RandomOverSampler to balance the dataset
+- **Class Imbalance Handling**: Applied RandomOverSampler to balance the dataset (equal 'healthy' and 'high risk' datapoints).
 - **Train-Test Split**: 75% training, 25% testing with stratified sampling
 - **Feature Standardization**: Optimized feature scaling for logistic regression
 
