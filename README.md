@@ -8,7 +8,8 @@ This project implements a credit risk assessment system using **Logistic Regress
 - **Advanced Data Handling**: RandomOverSampler to address severe class imbalance
 - **High Performance**: 99.42% accuracy and 0.9945 ROC-AUC with balanced precision and recall
 - **Interactive Web App**: Streamlit-based interface for real-time predictions
-- **Production Ready**: Complete model serialization and deployment architecture
+- **MLflow Tracking & Registry**: Full experiment tracking (accuracy, ROC AUC, precision/recall) and versioned model registration
+- **Production Ready**: Complete model serialization, MLflow-managed lineage, and deployment architecture
 
 ## Original Dataset
 The analysis uses lending data with 77,536 loan records containing:
@@ -33,11 +34,11 @@ The analysis uses lending data with 77,536 loan records containing:
 ### 3. Model Evaluation
 - **Cross-Validation**: 5-fold CV for robust performance estimation
 - **Metrics**: Accuracy, ROC AUC, Precision, Recall, F1-Score
-- **Performance Analysis**: Detailed classification reports and confusion matrices
+- **Performance Analysis**: Detailed classification reports and confusion matrices available in MLflow UI.
 
 ## Results
 
-### Model Performance
+### Production Model Performance
 | Metric | Value | Description |
 |--------|-------|-------------|
 | Test Accuracy | 99.42% | Overall prediction accuracy |
@@ -65,6 +66,7 @@ scikit-learn
 joblib
 numpy
 imbalanced-learn
+mlflow
 ```
 
 ## Streamlit Web Application
@@ -89,9 +91,59 @@ streamlit run app.py
 
 The trained Logistic Regression model is serialized using joblib for easy deployment:
 - Model saved with optimal hyperparameters and training data
-- Model metadata and performance metrics stored for monitoring
+- Model metadata and performance metrics stored and versioned via MLflow
 - Feature names preserved for consistent data preprocessing
+- Registered in the MLflow Model Registry as `CreditRiskClassifier` (enables staging/production promotion)
 - Complete deployment package for production use
+
+## MLflow Experiment Tracking & Model Registry
+
+This project uses **MLflow** to ensure reproducibility, transparency, and controlled model promotion.
+
+### Tracked Runs
+1. `Logistic_Regression_Original_Data` – Baseline model on imbalanced data
+2. `Logistic_Regression_Resampled_Data` – Improved model on oversampled (balanced) data
+3. `Production_Model_Deployment` – Final model registered for deployment
+
+### Logged Metrics (per run)
+- `train_accuracy`, `test_accuracy`
+- `train_roc_auc`, `test_roc_auc`
+- (Derived in artifacts) classification report precision/recall for each class
+
+### Logged Parameters
+- Data variant (original vs resampled)
+- Sampling method
+- Solver, regularization (C), iterations, random_state
+- Class balance counts and feature count
+
+### Artifacts
+- Evaluation summary (confusion matrices + classification reports)
+- Serialized model (MLflow + joblib)
+- Feature name list
+
+### Model Registry
+- Registered name: `CreditRiskClassifier`
+- Each new production candidate creates a new version
+- Ready for staged rollout / CI-based approval workflows
+
+### Launching the MLflow UI
+```bash
+mlflow ui --port 8000
+# Then open: http://localhost:8000
+```
+Optional (bind to all interfaces, e.g., for container access):
+```bash
+mlflow ui --host 0.0.0.0 --port 8000
+```
+
+### Viewing Results
+- Use the notebook's final summary cell for a quick textual overview
+- Open the MLflow UI to compare runs, download artifacts, or promote a model version
+
+### Why MLflow Here?
+- Provides an audit trail of improvements (imbalanced vs balanced)
+- Standardizes metric naming for automated dashboards
+- Simplifies deployment by referencing a registered model instead of manual file paths
 
 ## Business Impact
 
